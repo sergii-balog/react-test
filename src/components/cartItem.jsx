@@ -53,15 +53,15 @@ class CartItem extends Component {
     );
   }
 
-  getBadgeClasses() {
+  getBadgeClasses = () => {
     let classes = "badge m-2 p-2 badge-";
     classes += this.props.item.value === 0 ? "warning" : "primary";
     return classes;
-  }
-  formatCount() {
+  };
+  formatCount = () => {
     const count = this.props.item.value;
     return count === 0 ? "None" : count;
-  }
+  };
 }
 
 export default CartItem;
