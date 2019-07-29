@@ -2,12 +2,13 @@ import React, { Component } from "react";
 
 class CartItem extends Component {
   render() {
+    const { children, item, onChange, onDelete } = this.props;
     return (
-      <div className="row" style={{ borderBottom: "solid 1px #cacaca" }}>
+      <div className="row m-1" style={{ borderBottom: "solid 1px #cacaca" }}>
         <div className="col-sm-4" style={{ verticalAlign: "center" }}>
           <div className="m-2">
-            {this.props.children}
-            {this.props.item.product}
+            {children}
+            {item.product}
           </div>
         </div>
         <div className="col-sm-2">
@@ -16,16 +17,13 @@ class CartItem extends Component {
             className="badge badge-info p-2"
             style={{ borderRadius: "0px" }}
           >
-            $ {(this.props.item.price * this.props.item.value).toFixed(2)}
+            $ {(item.price * item.value).toFixed(2)}
           </span>
         </div>
         <div className="col">
           <button
             onClick={() => {
-              this.props.onChange(
-                this.props.item.id,
-                this.props.item.value + 1
-              );
+              onChange(item.id, item.value + 1);
             }}
             className="btn btn-sm btn-secondary m-2"
           >
@@ -33,17 +31,14 @@ class CartItem extends Component {
           </button>
           <button
             onClick={() => {
-              this.props.onChange(
-                this.props.item.id,
-                this.props.item.value - 1
-              );
+              onChange(item.id, item.value - 1);
             }}
             className="btn btn-sm btn-secondary"
           >
             <i className="fa fa-minus-circle" />
           </button>
           <button
-            onClick={() => this.props.onDelete(this.props.item.id)}
+            onClick={() => onDelete(item.id)}
             className="btn btn-sm btn-danger m-2"
           >
             <i className="fa fa-trash" />

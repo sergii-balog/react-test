@@ -2,15 +2,16 @@ import React, { Component } from "react";
 
 class MovieItem extends Component {
   render() {
+    const { movie, onDelete } = this.props;
     return (
       <tr>
-        <td>{this.props.movie.title}</td>
-        <td>{this.props.movie.genre.name}</td>
-        <td>{this.props.movie.numberInStock}</td>
-        <td>{this.props.movie.dailyRentalRate}</td>
+        <td>{movie.title}</td>
+        <td>{movie.genre.name}</td>
+        <td>{movie.numberInStock}</td>
+        <td>{movie.dailyRentalRate}</td>
         <td>
           <button
-            onClick={() => this.props.onDelete(this.props.movie._id)}
+            onClick={() => onDelete(movie._id)}
             className="btn btn-sm btn-danger m-2"
           >
             <i className="fa fa-trash" />

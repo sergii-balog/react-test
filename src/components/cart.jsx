@@ -4,12 +4,6 @@ import CartTotal from "./cartTotal";
 import CartHeader from "./cartHeader";
 
 class Cart extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      items: []
-    };
-  }
   handleUndo = () => {
     this.getItems();
   };
@@ -52,11 +46,13 @@ class Cart extends Component {
     });
   };
   render() {
+    if (this.state === null) return null;
+    const { items } = this.state;
     return (
       <div className="p-2">
         <div className="container p-2" style={{ backgroundColor: "#f5f5f5" }}>
-          <CartHeader cartItems={this.state.items} />
-          {this.state.items.map((item, i) => (
+          <CartHeader cartItems={items} />
+          {items.map((item, i) => (
             <CartItem
               key={item.id}
               item={item}
@@ -66,7 +62,7 @@ class Cart extends Component {
               {i + 1}.&nbsp;
             </CartItem>
           ))}
-          <CartTotal items={this.state.items} onUndo={this.handleUndo} />
+          <CartTotal items={items} onUndo={this.handleUndo} />
         </div>
       </div>
     );
