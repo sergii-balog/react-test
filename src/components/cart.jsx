@@ -11,19 +11,27 @@ class Cart extends Component {
     this.getItems();
   }
   getItems() {
-    fetch(this.props.dataUrl)
-      .then(response => response.json())
-      .then(jsonData => {
-        this.setState({
-          items: jsonData
-        });
-      })
-      .catch(error => {
-        console.error(error);
-        this.setState({
-          items: []
-        });
-      });
+    // fetch(this.props.dataUrl)
+    //   .then(response => response.json())
+    //   .then(items => {
+    //     this.setState({ items });
+    //   })
+    //   .catch(error => {
+    //     console.error(error);
+    //     this.setState({
+    //       items: []
+    //     });
+    //   });
+    var xmlhttp = new XMLHttpRequest();
+    var self = this;
+    xmlhttp.onreadystatechange = function() {
+      if (this.readyState === 4 && this.status === 200) {
+        var items = JSON.parse(this.responseText);
+        self.setState({ items });
+      }
+    };
+    xmlhttp.open("GET", this.props.dataUrl, true);
+    xmlhttp.send();
   }
   handleDelete = counterId => {
     if (

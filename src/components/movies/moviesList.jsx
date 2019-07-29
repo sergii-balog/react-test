@@ -5,7 +5,8 @@ import MovieHeader from "./moviesHeader";
 
 class MoviesList extends Component {
   state = {
-    movies: getMovies()
+    movies: getMovies(),
+    liked: []
   };
 
   haldleDelete = movieId => {
@@ -21,12 +22,25 @@ class MoviesList extends Component {
       });
     }
   };
+  handleLikedClicked = movieId => {
+    if (this.state.liked.filter(x => x === movieId).length === 0) {
+      const newLiked = [...this.state.liked];
+      newLiked.push(movieId);
+      this.setState({ liked: newLiked });
+    } else {
+      const newLiked = this.state.liked.filter(x => x !== movieId);
+      this.setState({ liked: newLiked });
+    }
+  };
   render() {
     return (
-      <main role="main" class="container p-2">
-        <MovieHeader numberOfItems={this.state.movies.length} />
-        <div class="table-responsive">
-          <table class="table table-striped">
+      <main role="main" className="container p-2">
+        <MovieHeader
+          numberOfItems={this.state.movies.length}
+          numberOfLiked={this.state.liked.length}
+        />
+        <div className="table-responsive">
+          <table className="table table-striped">
             <thead>
               <tr>
                 <th>Title</th>
@@ -34,11 +48,18 @@ class MoviesList extends Component {
                 <th>In Stock</th>
                 <th>Rate</th>
                 <th />
+                <th />
               </tr>
             </thead>
             <tbody>
               {this.state.movies.map(movie => (
-                <MovieItem movie={movie} onDelete={this.haldleDelete} />
+                <MovieItem
+                  key={movie._id}
+                  likedMovies={this.state.liked}
+                  movie={movie}
+                  onDelete={this.haldleDelete}
+                  onLikeClicked={this.handleLikedClicked}
+                />
               ))}
             </tbody>
           </table>

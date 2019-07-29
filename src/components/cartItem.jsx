@@ -34,6 +34,7 @@ class CartItem extends Component {
               onChange(item.id, item.value - 1);
             }}
             className="btn btn-sm btn-secondary"
+            disabled={this.props.item.value === 0 ? "disabled" : ""}
           >
             <i className="fa fa-minus-circle" />
           </button>
@@ -47,7 +48,6 @@ class CartItem extends Component {
       </div>
     );
   }
-
   getBadgeClasses = () => {
     let classes = "badge m-2 p-2 badge-";
     classes += this.props.item.value === 0 ? "warning" : "primary";

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 class MoviesHeader extends Component {
   render() {
-    const { numberOfItems } = this.props;
+    const { numberOfItems, numberOfLiked } = this.props;
     if (numberOfItems === 0) {
       return (
         <div
@@ -14,7 +14,8 @@ class MoviesHeader extends Component {
     }
     return (
       <div className="alert alert-info" style={{ textAlign: "center" }}>
-        Showing <strong>{numberOfItems}</strong> movies in the database
+        Showing <strong>{numberOfItems}</strong> movies in the database [{" "}
+        <strong>{numberOfLiked}</strong> liked ]
       </div>
     );
   }
