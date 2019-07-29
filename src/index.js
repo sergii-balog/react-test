@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "bootstrap/dist/css/bootstrap.css";
 import "font-awesome/css/font-awesome.min.css";
-import Cart from "./components/cart";
+import Cart from "./components/cart/cart";
 import MoviesList from "./components/movies/moviesList";
 
 ReactDOM.render(
