@@ -2,42 +2,52 @@ import React, { Component } from "react";
 import { getMovies } from "../../services/fakeMovieService";
 import MovieItem from "./movieItem";
 import MovieHeader from "./moviesHeader";
+import Paging from "../common/paging";
+import { paginate } from "../../utils/paginate";
 
 class MoviesList extends Component {
   state = {
     movies: getMovies(),
-    liked: []
+    liked: [],
+    selectedPage: 1,
+    pageSize: 3
   };
 
-  haldleDelete = movieId => {
+  handleDelete = movieId => {
+    const { movies } = this.state;
     if (
       window.confirm(
         "Are you sure you want to delete '" +
-          this.state.movies.filter(x => x._id === movieId)[0].title +
+          movies.filter(x => x._id === movieId)[0].title +
           "'?"
       )
     ) {
       this.setState({
-        movies: this.state.movies.filter(x => x._id !== movieId)
+        movies: movies.filter(x => x._id !== movieId)
       });
     }
   };
   handleLikedClicked = movieId => {
-    if (this.state.liked.filter(x => x === movieId).length === 0) {
-      const newLiked = [...this.state.liked];
+    const { liked } = this.state;
+    if (liked.filter(x => x === movieId).length === 0) {
+      const newLiked = [...liked];
       newLiked.push(movieId);
       this.setState({ liked: newLiked });
     } else {
-      const newLiked = this.state.liked.filter(x => x !== movieId);
+      const newLiked = liked.filter(x => x !== movieId);
       this.setState({ liked: newLiked });
     }
   };
+  handlePageSelected = pageNumber => {
+    this.setState({ selectedPage: pageNumber });
+  };
   render() {
+    const { movies, liked, selectedPage, pageSize } = this.state;
     return (
       <main role="main" className="container p-2">
         <MovieHeader
-          numberOfItems={this.state.movies.length}
-          numberOfLiked={this.state.liked.length}
+          numberOfItems={movies.length}
+          numberOfLiked={liked.length}
         />
         <div className="table-responsive">
           <table className="table table-striped">
@@ -52,18 +62,24 @@ class MoviesList extends Component {
               </tr>
             </thead>
             <tbody>
-              {this.state.movies.map(movie => (
+              {paginate(movies, selectedPage, pageSize).map(movie => (
                 <MovieItem
                   key={movie._id}
-                  likedMovies={this.state.liked}
+                  likedMovies={liked}
                   movie={movie}
-                  onDelete={this.haldleDelete}
+                  onDelete={this.handleDelete}
                   onLikeClicked={this.handleLikedClicked}
                 />
               ))}
             </tbody>
           </table>
         </div>
+        <Paging
+          totalItems={movies.length}
+          pageSize={pageSize}
+          onPageSelected={this.handlePageSelected}
+          selectedPage={selectedPage}
+        />
       </main>
     );
   }
