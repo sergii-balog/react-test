@@ -1,22 +1,27 @@
 import React, { Component } from "react";
 import { getMovies } from "../../services/fakeMovieService";
 import { getGenres } from "../../services/fakeGenreService";
-import MovieItem from "./movieItem";
 import MovieHeader from "./moviesHeader";
 import Paging from "../common/paging";
 import { paginate } from "../../utils/paginate";
 import Filter from "../common/filter";
+import MoviesTable from "./moviesTable";
+import _ from "lodash";
 
-class MoviesList extends Component {
+class Movies extends Component {
   state = {
-    movies: getMovies(),
-    genres: getGenres(),
+    movies: [],
+    genres: [],
     liked: [],
     selectedPage: 1,
     pageSize: 3,
-    selectedFilterIndex: 0
+    selectedFilterIndex: 0,
+    sortBy: { column: "title", type: "asc" }
   };
 
+  componentDidMount() {
+    this.setState({ movies: getMovies(), genres: getGenres() });
+  }
   handleDelete = movieId => {
     const { movies } = this.state;
     if (
@@ -45,6 +50,10 @@ class MoviesList extends Component {
   handlePageSelected = pageNumber => {
     this.setState({ selectedPage: pageNumber });
   };
+  handleSort = path => {
+    const sort = this.state.sortBy.type === "asc" ? "desc" : "asc";
+    this.setState({ sortBy: { column: path, type: sort } });
+  };
   handleFilterSelected = filterIndex => {
     this.setState({ selectedFilterIndex: filterIndex, selectedPage: 1 });
   };
@@ -55,18 +64,22 @@ class MoviesList extends Component {
       selectedPage,
       pageSize,
       genres,
-      selectedFilterIndex
+      selectedFilterIndex,
+      sortBy
     } = this.state;
+
     const filteredMovies =
       selectedFilterIndex === 0
         ? movies
         : movies.filter(
             x => x.genre.name === genres[selectedFilterIndex - 1].name
           );
+    const sorted = _.orderBy(filteredMovies, [sortBy.column], [sortBy.type]);
+
     return (
       <main role="main" className="container p-2">
         <div className="row">
-          <div className="col-2">
+          <div className="col-3">
             <Filter
               options={genres.map(x => x.name)}
               selectedIndex={selectedFilterIndex}
@@ -75,36 +88,19 @@ class MoviesList extends Component {
           </div>
           <div className="col">
             <MovieHeader
-              numberOfItems={movies.length}
-              numberOfLiked={liked.length}
+              numberOfItems={filteredMovies.length}
+              numberOfLiked={
+                liked.filter(value => filteredMovies.some(x => x._id === value))
+                  .length
+              }
             />
-            <div className="table-responsive">
-              <table className="table table-striped">
-                <thead>
-                  <tr>
-                    <th>Title</th>
-                    <th>Genre</th>
-                    <th>In Stock</th>
-                    <th>Rate</th>
-                    <th />
-                    <th />
-                  </tr>
-                </thead>
-                <tbody>
-                  {paginate(filteredMovies, selectedPage, pageSize).map(
-                    movie => (
-                      <MovieItem
-                        key={movie._id}
-                        likedMovies={liked}
-                        movie={movie}
-                        onDelete={this.handleDelete}
-                        onLikeClicked={this.handleLikedClicked}
-                      />
-                    )
-                  )}
-                </tbody>
-              </table>
-            </div>
+            <MoviesTable
+              movies={paginate(sorted, selectedPage, pageSize)}
+              liked={liked}
+              onDelete={this.handleDelete}
+              onLikeClicked={this.handleLikedClicked}
+              onSort={this.handleSort}
+            />
             <Paging
               totalItems={filteredMovies.length}
               pageSize={pageSize}
@@ -118,4 +114,4 @@ class MoviesList extends Component {
   }
 }
 
-export default MoviesList;
+export default Movies;
