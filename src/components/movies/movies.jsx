@@ -100,6 +100,7 @@ class Movies extends Component {
               onDelete={this.handleDelete}
               onLikeClicked={this.handleLikedClicked}
               onSort={this.handleSort}
+              sortBy={sortBy}
             />
             <Paging
               totalItems={filteredMovies.length}
