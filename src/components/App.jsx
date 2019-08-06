@@ -1,8 +1,12 @@
 import React, { Component } from "react";
 import Movies from "./movies/movies";
-import { Route, Switch } from "react-router-dom";
-import Products from "./products";
+import { Route, Switch, Redirect } from "react-router-dom";
+import Customers from "./pages/customers";
 import NavBar from "./navbar";
+import NotFound from "./pages/notfound";
+import HomePage from "./pages/home";
+import MovieForm from "./pages/movieform";
+import Cart from "./cart/cart";
 
 class App extends Component {
   render() {
@@ -11,8 +15,18 @@ class App extends Component {
         <NavBar />
         <div className="content">
           <Switch>
-            <Route path="/products" component={Products} />
-            <Route path="/" exact component={Movies} />
+            <Route path="/movies/:id" component={MovieForm} />
+            <Route path="/movies" component={Movies} />
+            <Route path="/customers" component={Customers} />
+            <Route
+              path="/cart"
+              render={props => (
+                <Cart dataUrl="http://localhost:4546/api/cart" {...props} />
+              )}
+            />
+            <Route path="/not-found" component={NotFound} />
+            <Route path="/" exact component={HomePage} />
+            <Redirect to="/not-found" />
           </Switch>
         </div>
       </div>

@@ -1,12 +1,14 @@
 import React, { Component } from "react";
 import Like from "../common/like";
-
+import { Link } from "react-router-dom";
 class MovieItem extends Component {
   render() {
     const { movie, onDelete, onLikeClicked, likedMovies } = this.props;
     return (
       <tr>
-        <td>{movie.title}</td>
+        <td>
+          <Link to={`/movies/${movie._id}`}>{movie.title}</Link>
+        </td>
         <td>{movie.genre.name}</td>
         <td>{movie.numberInStock}</td>
         <td>{movie.dailyRentalRate}</td>
