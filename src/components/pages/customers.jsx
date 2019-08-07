@@ -1,7 +1,9 @@
 import React, { Component } from "react";
+import FormTitle from "../common/formTitle";
+
 class Customers extends Component {
   render() {
-    return <h5 className="text-center">Customers list</h5>;
+    return <FormTitle title="Customers" />;
   }
 }
 

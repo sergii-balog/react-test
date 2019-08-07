@@ -1,24 +1,23 @@
 import React from "react";
 
-const Input = ({ name, label, hint, placeholder, value, onChange }) => {
+const Input = ({ name, label, hint, placeholder, error, ...rest }) => {
   return (
     <div className="form-group">
       <label htmlFor={name}>{label}</label>
       <input
-        type="text"
         className="form-control"
         id={name}
         name={name}
         aria-describedby="emailHelp"
         placeholder={placeholder || ""}
-        value={value}
-        onChange={onChange}
+        {...rest}
       />
       {hint && (
         <small id="emailHelp" className="form-text text-muted">
           {hint}
         </small>
       )}
+      {error && <div className="text-danger">{error}</div>}
     </div>
   );
 };

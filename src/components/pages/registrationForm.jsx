@@ -3,30 +3,36 @@ import Joi from "joi-browser";
 import FormBase from "../common/form";
 import FormTitle from "../common/formTitle";
 
-class LoginForm extends FormBase {
+class RegistrationForm extends FormBase {
   state = {
-    data: { username: "", password: "" },
+    data: { username: "", password: "", name: "" },
     errors: {}
   };
 
   schema = {
     username: Joi.string()
+      .email()
       .required()
       .label("User name"),
     password: Joi.string()
       .required()
-      .label("Password")
+      .min(6)
+      .max(12)
+      .label("Password"),
+    name: Joi.string()
+      .required()
+      .min(3)
   };
 
   doSubmit = () => {
     // call the server
-    console.log("Submited");
+    console.log("Registered");
   };
 
   render() {
     return (
       <div className="container">
-        <FormTitle title="Login" />
+        <FormTitle title="Registration" />
         <form onSubmit={this.handleSubmit}>
           {this.renderInput(
             "username",
@@ -41,11 +47,12 @@ class LoginForm extends FormBase {
             "",
             "password"
           )}
-          {this.renderButton("Login")}
+          {this.renderInput("name", "Name", "Name", "Your preferred name")}
+          {this.renderButton("Register")}
         </form>
       </div>
     );
   }
 }
 
-export default LoginForm;
+export default RegistrationForm;
