@@ -2,11 +2,12 @@ import React, { Component } from "react";
 import Movies from "./movies/movies";
 import { Route, Switch, Redirect } from "react-router-dom";
 import Customers from "./pages/customers";
-import NavBar from "./navbar";
-import NotFound from "./pages/notfound";
+import NavBar from "./navBar";
+import NotFound from "./pages/notFound";
 import HomePage from "./pages/home";
-import MovieForm from "./pages/movieform";
+import MovieForm from "./pages/movieForm";
 import Cart from "./cart/cart";
+import LoginForm from "./pages/loginForm";
 
 class App extends Component {
   render() {
@@ -25,6 +26,7 @@ class App extends Component {
               )}
             />
             <Route path="/not-found" component={NotFound} />
+            <Route path="/login" component={LoginForm} />
             <Route path="/" exact component={HomePage} />
             <Redirect to="/not-found" />
           </Switch>
