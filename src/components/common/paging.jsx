@@ -38,8 +38,11 @@ const Paging = props => {
           </div>
           <div className="col-2 text-right">
             <span>
-              {(selectedPage - 1) * pageSize + 1}-{selectedPage * pageSize} of{" "}
-              {totalItems}
+              {(selectedPage - 1) * pageSize + 1}-
+              {selectedPage * pageSize > totalItems
+                ? totalItems
+                : selectedPage * pageSize}{" "}
+              of {totalItems}
             </span>
           </div>
         </div>
