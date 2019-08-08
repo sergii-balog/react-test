@@ -11,26 +11,40 @@ const Paging = props => {
   if (parseInt(pagesCount) === 1) return null;
 
   return (
-    <nav aria-label="Paging area">
-      <ul className="pagination">
-        {pages.map(page => (
-          <li
-            key={page}
-            className={selectedPage === page ? "page-item active" : "page-item"}
-          >
-            <a
-              className="page-link"
-              href="# "
-              onClick={() => {
-                onPageSelected(page);
-              }}
-            >
-              {page}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </nav>
+    <React.Fragment>
+      <nav aria-label="Paging area">
+        <div className="row">
+          <div className="col">
+            <ul className="pagination">
+              {pages.map(page => (
+                <li
+                  key={page}
+                  className={
+                    selectedPage === page ? "page-item active" : "page-item"
+                  }
+                >
+                  <a
+                    className="page-link"
+                    href="# "
+                    onClick={() => {
+                      onPageSelected(page);
+                    }}
+                  >
+                    {page}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="col-2 text-right">
+            <span>
+              {(selectedPage - 1) * pageSize + 1}-{selectedPage * pageSize} of{" "}
+              {totalItems}
+            </span>
+          </div>
+        </div>
+      </nav>
+    </React.Fragment>
   );
 };
 
