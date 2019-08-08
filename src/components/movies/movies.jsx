@@ -8,6 +8,7 @@ import Filter from "../common/filter";
 import MoviesTable from "./moviesTable";
 import { Link } from "react-router-dom";
 import _ from "lodash";
+import SearchBox from "../common/searchBox";
 
 class Movies extends Component {
   state = {
@@ -17,7 +18,8 @@ class Movies extends Component {
     selectedPage: 1,
     pageSize: 3,
     selectedFilterIndex: 0,
-    sortBy: { column: "title", type: "asc" }
+    sortBy: { column: "title", type: "asc" },
+    searchQuery: ""
   };
 
   componentDidMount() {
@@ -57,7 +59,18 @@ class Movies extends Component {
     this.setState({ sortBy: { column: path, type: sort } });
   };
   handleFilterSelected = filterIndex => {
-    this.setState({ selectedFilterIndex: filterIndex, selectedPage: 1 });
+    this.setState({
+      selectedFilterIndex: filterIndex,
+      searchQuery: "",
+      selectedPage: 1
+    });
+  };
+  handleSearch = query => {
+    this.setState({
+      searchQuery: query,
+      selectedFilterIndex: 0,
+      selectedPage: 1
+    });
   };
   render() {
     const {
@@ -67,14 +80,23 @@ class Movies extends Component {
       pageSize,
       genres,
       selectedFilterIndex,
-      sortBy
+      sortBy,
+      searchQuery
     } = this.state;
 
-    const filteredMovies =
+    let filteredMovies =
       selectedFilterIndex === 0
         ? movies
         : movies.filter(
             x => x.genre.name === genres[selectedFilterIndex - 1].name
+          );
+    filteredMovies =
+      searchQuery === ""
+        ? filteredMovies
+        : filteredMovies.filter(
+            x =>
+              x.title.toLowerCase().indexOf(searchQuery.toLocaleLowerCase()) >
+              -1
           );
     const sorted = _.orderBy(filteredMovies, [sortBy.column], [sortBy.type]);
 
@@ -89,7 +111,7 @@ class Movies extends Component {
             />
           </div>
           <div className="col">
-            <Link to="/movies/new" className="btn btn-primary btn-sm m-2">
+            <Link to="/movies/new" className="btn btn-primary btn-sm my-2">
               Add movie
             </Link>
             <MovieHeader
@@ -99,6 +121,7 @@ class Movies extends Component {
                   .length
               }
             />
+            <SearchBox value={searchQuery} onChange={this.handleSearch} />
             <MoviesTable
               movies={paginate(sorted, selectedPage, pageSize)}
               liked={liked}

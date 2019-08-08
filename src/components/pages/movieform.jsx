@@ -97,7 +97,10 @@ class MovieForm extends FormBase {
             "Rate",
             "Daily rental rate"
           )}
-          <button onClick={this.handleCancel} className="btn btn-secondary m-2">
+          <button
+            onClick={this.handleCancel}
+            className="btn btn-secondary mr-2"
+          >
             Cancel
           </button>
           {this.renderButton("Save")}
