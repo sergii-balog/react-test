@@ -9,34 +9,34 @@ class MovieForm extends FormBase {
   state = {
     data: {
       title: "",
-      numberInStock: 0,
-      dailyRentalRate: 0,
-      _id: "0",
-      genre: { _id: "0", name: "-" }
+      numberInStock: "",
+      dailyRentalRate: "",
+      genreId: ""
     },
     errors: {},
     genres: []
   };
 
   componentDidMount() {
-    const { params } = this.props.match;
-    let data = {
-      title: "",
-      numberInStock: 0,
-      dailyRentalRate: 0,
-      _id: "0",
-      genre: { _id: "0", name: "-" }
-    };
-    if (params.id !== "new") {
-      data = { ...getMovie(params.id) };
-    }
     const genres = getGenres();
-    this.setState({ data, genres });
+    this.setState({ genres });
+
+    const { params } = this.props.match;
+    if (params.id === "new") return;
+    const movie = getMovie(params.id);
+    if (!movie) return this.props.history.replace("/not-found");
+
+    this.setState({ data: this.mapToViewModel(movie) });
   }
-  genreSchema = Joi.object().keys({
-    _id: Joi.string(),
-    name: Joi.string()
-  });
+  mapToViewModel = movie => {
+    return {
+      _id: movie._id,
+      title: movie.title,
+      genreId: movie.genre._id,
+      numberInStock: movie.numberInStock,
+      dailyRentalRate: movie.dailyRentalRate
+    };
+  };
   schema = {
     title: Joi.string()
       .required()
@@ -47,11 +47,13 @@ class MovieForm extends FormBase {
       .label("Number in Stock"),
     dailyRentalRate: Joi.number()
       .required()
-      .min(1)
+      .min(0)
       .max(10)
       .label("Rate"),
     _id: Joi.string(),
-    genre: this.genreSchema
+    genreId: Joi.string()
+      .required()
+      .label("Genre")
   };
 
   doSubmit = () => {
@@ -77,7 +79,7 @@ class MovieForm extends FormBase {
         <form onSubmit={this.handleSubmit}>
           {this.renderInput("title", "Title", "Movie title", "Movie title")}
           {this.renderInput(
-            "genre",
+            "genreId",
             "Genre",
             "",
             "",

@@ -19,9 +19,10 @@ const Input = ({
           className="form-control"
           id={name}
           name={name}
-          value={value._id}
+          value={value}
           {...rest}
         >
+          <option value="" />
           {options.map(x => (
             <option key={x._id} value={x._id}>
               {x.name}
@@ -34,7 +35,9 @@ const Input = ({
           id={name}
           name={name}
           type={type}
+          value={value}
           placeholder={placeholder || ""}
+          autoComplete={`cc-${name}`}
           {...rest}
         />
       )}

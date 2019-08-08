@@ -6,6 +6,7 @@ import Paging from "../common/paging";
 import { paginate } from "../../utils/paginate";
 import Filter from "../common/filter";
 import MoviesTable from "./moviesTable";
+import { Link } from "react-router-dom";
 import _ from "lodash";
 
 class Movies extends Component {
@@ -58,9 +59,6 @@ class Movies extends Component {
   handleFilterSelected = filterIndex => {
     this.setState({ selectedFilterIndex: filterIndex, selectedPage: 1 });
   };
-  handleNewMovie = () => {
-    this.props.history.push("/movies/new");
-  };
   render() {
     const {
       movies,
@@ -91,12 +89,9 @@ class Movies extends Component {
             />
           </div>
           <div className="col">
-            <button
-              onClick={this.handleNewMovie}
-              className="btn btn-primary btn-sm m-2"
-            >
+            <Link to="/movies/new" className="btn btn-primary btn-sm m-2">
               Add movie
-            </button>
+            </Link>
             <MovieHeader
               numberOfItems={filteredMovies.length}
               numberOfLiked={
