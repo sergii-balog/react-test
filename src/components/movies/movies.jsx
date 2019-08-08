@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { getMovies } from "../../services/fakeMovieService";
+import { getMovies, deleteMovie } from "../../services/fakeMovieService";
 import { getGenres } from "../../services/fakeGenreService";
 import MovieHeader from "./moviesHeader";
 import Paging from "../common/paging";
@@ -31,6 +31,7 @@ class Movies extends Component {
           "'?"
       )
     ) {
+      deleteMovie(movieId);
       this.setState({
         movies: movies.filter(x => x._id !== movieId)
       });
@@ -56,6 +57,9 @@ class Movies extends Component {
   };
   handleFilterSelected = filterIndex => {
     this.setState({ selectedFilterIndex: filterIndex, selectedPage: 1 });
+  };
+  handleNewMovie = () => {
+    this.props.history.push("/movies/new");
   };
   render() {
     const {
@@ -87,6 +91,12 @@ class Movies extends Component {
             />
           </div>
           <div className="col">
+            <button
+              onClick={this.handleNewMovie}
+              className="btn btn-primary btn-sm m-2"
+            >
+              Add movie
+            </button>
             <MovieHeader
               numberOfItems={filteredMovies.length}
               numberOfLiked={

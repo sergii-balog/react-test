@@ -10,15 +10,22 @@ class FormBase extends Component {
   validate = () => {
     const options = { abortEarly: false };
     const result = Joi.validate(this.state.data, this.schema, options);
+    //console.log(result.error);
     if (!result.error) return null;
     const errors = {};
     for (let item of result.error.details) errors[item.path[0]] = item.message;
     return errors;
   };
 
-  validateProperty = ({ name, value }) => {
-    const validateObject = { [name]: value };
+  validateProperty = ({ name, value, options }) => {
+    let validateObject = { [name]: value };
+    if (options) {
+      validateObject = {};
+      validateObject._id = options[options.selectedIndex].value;
+      validateObject.name = options[options.selectedIndex].text;
+    }
     const schema = { [name]: this.schema[name] };
+    console.log(this.schema[name].keys());
     const { error } = Joi.validate(validateObject, schema);
     return error ? error.details[0].message : null;
   };
@@ -32,8 +39,14 @@ class FormBase extends Component {
     this.doSubmit();
   };
   handleChange = ({ currentTarget: input }) => {
+    //console.log(input, this.state.data[input.name], input.value);
     const data = { ...this.state.data };
-    data[input.name] = input.value;
+    if (input.type === "select-one") {
+      data[input.name]._id = input.value;
+    } else {
+      data[input.name] = input.value;
+    }
+
     const errors = { ...this.state.errors };
     const errorMessage = this.validateProperty(input);
     if (errorMessage) errors[input.name] = errorMessage;
@@ -52,7 +65,14 @@ class FormBase extends Component {
       </button>
     );
   };
-  renderInput = (name, label, placeholder, hint, type = "text") => {
+  renderInput = (
+    name,
+    label,
+    placeholder,
+    hint,
+    type = "text",
+    options = []
+  ) => {
     const { data, errors } = this.state;
     return (
       <Input
@@ -64,6 +84,7 @@ class FormBase extends Component {
         placeholder={placeholder}
         error={errors[name]}
         type={type}
+        options={options}
       />
     );
   };
