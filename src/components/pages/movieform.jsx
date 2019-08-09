@@ -2,28 +2,28 @@ import React from "react";
 import Joi from "joi-browser";
 import FormBase from "../common/form";
 import FormTitle from "../common/formTitle";
-import { getMovie, saveMovie } from "../../services/fakeMovieService";
-import { getGenres } from "../../services/fakeGenreService";
+import { getMovie, saveMovie } from "../../services/movieService";
+import { getGenres } from "../../services/genreService";
 
 class MovieForm extends FormBase {
   state = {
     data: {
       title: "",
       numberInStock: "",
-      dailyRentalRate: "",
+      dailyRentalRent: "",
       genreId: ""
     },
     errors: {},
     genres: []
   };
 
-  componentDidMount() {
-    const genres = getGenres();
+  async componentDidMount() {
+    const genres = await getGenres();
     this.setState({ genres });
 
     const { params } = this.props.match;
     if (params.id === "new") return;
-    const movie = getMovie(params.id);
+    const movie = await getMovie(params.id);
     if (!movie) return this.props.history.replace("/not-found");
 
     this.setState({ data: this.mapToViewModel(movie) });
@@ -34,7 +34,7 @@ class MovieForm extends FormBase {
       title: movie.title,
       genreId: movie.genre._id,
       numberInStock: movie.numberInStock,
-      dailyRentalRate: movie.dailyRentalRate
+      dailyRentalRent: movie.dailyRentalRent
     };
   };
   schema = {
@@ -45,7 +45,7 @@ class MovieForm extends FormBase {
       .required()
       .min(0)
       .label("Number in Stock"),
-    dailyRentalRate: Joi.number()
+    dailyRentalRent: Joi.number()
       .required()
       .min(0)
       .max(10)
@@ -56,9 +56,9 @@ class MovieForm extends FormBase {
       .label("Genre")
   };
 
-  doSubmit = () => {
+  doSubmit = async () => {
     // call the server
-    saveMovie(this.state.data);
+    await saveMovie(this.state.data);
     this.props.history.push("/movies");
   };
   handleCancel = e => {
@@ -92,7 +92,7 @@ class MovieForm extends FormBase {
             "Number in Stock"
           )}
           {this.renderInput(
-            "dailyRentalRate",
+            "dailyRentalRent",
             "Rate",
             "Rate",
             "Daily rental rate"

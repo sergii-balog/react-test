@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { getMovies, deleteMovie } from "../../services/fakeMovieService";
-import { getGenres } from "../../services/fakeGenreService";
+import { getMovies, deleteMovie } from "../../services/movieService";
+import { getGenres } from "../../services/genreService";
 import MovieHeader from "./moviesHeader";
 import Paging from "../common/paging";
 import { paginate } from "../../utils/paginate";
@@ -22,10 +22,12 @@ class Movies extends Component {
     searchQuery: ""
   };
 
-  componentDidMount() {
-    this.setState({ movies: getMovies(), genres: getGenres() });
+  async componentDidMount() {
+    const genres = await getGenres();
+    const movies = await getMovies();
+    this.setState({ movies, genres });
   }
-  handleDelete = movieId => {
+  handleDelete = async movieId => {
     const { movies } = this.state;
     if (
       window.confirm(
@@ -34,7 +36,7 @@ class Movies extends Component {
           "'?"
       )
     ) {
-      deleteMovie(movieId);
+      await deleteMovie(movieId);
       this.setState({
         movies: movies.filter(x => x._id !== movieId)
       });
