@@ -16,17 +16,25 @@ class MovieForm extends FormBase {
     errors: {},
     genres: []
   };
-
-  async componentDidMount() {
+  async getGenres() {
     const genres = await getGenres();
     this.setState({ genres });
+  }
+  async getMovie() {
+    try {
+      const { params } = this.props.match;
+      if (params.id === "new") return;
 
-    const { params } = this.props.match;
-    if (params.id === "new") return;
-    const movie = await getMovie(params.id);
-    if (!movie) return this.props.history.replace("/not-found");
-
-    this.setState({ data: this.mapToViewModel(movie) });
+      const movie = await getMovie(params.id);
+      this.setState({ data: this.mapToViewModel(movie) });
+    } catch (ex) {
+      if (ex.response && ex.response.status === 404)
+        return this.props.history.replace("/not-found");
+    }
+  }
+  async componentDidMount() {
+    await this.getGenres();
+    await this.getMovie();
   }
   mapToViewModel = movie => {
     return {

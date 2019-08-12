@@ -9,6 +9,7 @@ import MoviesTable from "./moviesTable";
 import { Link } from "react-router-dom";
 import _ from "lodash";
 import SearchBox from "../common/searchBox";
+import { toast } from "react-toastify";
 
 class Movies extends Component {
   state = {
@@ -28,18 +29,24 @@ class Movies extends Component {
     this.setState({ movies, genres });
   }
   handleDelete = async movieId => {
-    const { movies } = this.state;
+    const { movies: originalMovies } = this.state;
     if (
       window.confirm(
         "Are you sure you want to delete '" +
-          movies.filter(x => x._id === movieId)[0].title +
+          originalMovies.filter(x => x._id === movieId)[0].title +
           "'?"
       )
     ) {
-      await deleteMovie(movieId);
-      this.setState({
-        movies: movies.filter(x => x._id !== movieId)
-      });
+      const movies = originalMovies.filter(x => x._id !== movieId);
+      this.setState({ movies });
+      try {
+        await deleteMovie(movieId);
+      } catch (ex) {
+        if (ex.response && ex.response.status === 404) {
+          toast.error("This movie has already been deleted");
+        }
+        this.setState({ movies: originalMovies });
+      }
     }
   };
   handleLikedClicked = movieId => {

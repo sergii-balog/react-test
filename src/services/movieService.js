@@ -1,22 +1,34 @@
-import * as genresAPI from "./genreService";
 import http from "./httpService";
+import config from "../config.json";
 
+const moviesEndpoint = config.apiUrl + config.moviesEndpoint;
+
+function movieUrl(id) {
+  return `${moviesEndpoint}/${id}`;
+}
 export async function getMovies() {
-  const result = await http.get("http://localhost:4546/api/movies");
+  const result = await http.get(moviesEndpoint);
   return result.data;
 }
 
 export async function getMovie(id) {
-  const result = await http.get("http://localhost:4546/api/movies/" + id);
+  const result = await http.get(movieUrl(id));
   return result.data;
 }
 
 export async function saveMovie(movie) {
-  const result = await http.post("http://localhost:4546/api/movies/", movie);
+  let result;
+  if (movie._id) {
+    const body = { ...movie };
+    delete body._id;
+    result = await http.put(movieUrl(movie._id), body);
+  } else {
+    result = await http.post(moviesEndpoint, movie);
+  }
   return result.data;
 }
 
 export async function deleteMovie(id) {
-  const result = await http.delete("http://localhost:4546/api/movies/" + id);
+  const result = await http.delete(movieUrl(id));
   return result.data;
 }
