@@ -2,6 +2,7 @@ import React from "react";
 import Joi from "joi-browser";
 import FormBase from "../common/form";
 import FormTitle from "../common/formTitle";
+import * as authService from "../../services/authService";
 
 class LoginForm extends FormBase {
   state = {
@@ -18,9 +19,9 @@ class LoginForm extends FormBase {
       .label("Password")
   };
 
-  doSubmit = () => {
-    // call the server
-    console.log("Submited");
+  doSubmit = async () => {
+    const { username, password } = this.state.data;
+    const result = await authService.login(username, password);
   };
 
   render() {
