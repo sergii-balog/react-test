@@ -15,7 +15,7 @@ class MoviesTable extends Component {
       { title: "Title", path: "title" },
       { title: "Genre", path: "genre.name" },
       { title: "In Stock", path: "numberInStock" },
-      { title: "Rate", path: "dailyRentalRate" }
+      { title: "Rate", path: "dailyRentalRent" }
     ];
     return (
       <div className="table-responsive">

@@ -108,7 +108,6 @@ class Movies extends Component {
               -1
           );
     const sorted = _.orderBy(filteredMovies, [sortBy.column], [sortBy.type]);
-
     return (
       <main role="main" className="container p-2">
         <div className="row">

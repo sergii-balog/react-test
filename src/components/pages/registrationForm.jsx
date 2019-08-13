@@ -3,6 +3,7 @@ import Joi from "joi-browser";
 import FormBase from "../common/form";
 import FormTitle from "../common/formTitle";
 import * as userService from "../../services/userService";
+import * as authService from "../../services/authService";
 
 class RegistrationForm extends FormBase {
   state = {
@@ -27,7 +28,9 @@ class RegistrationForm extends FormBase {
 
   doSubmit = async () => {
     try {
-      await userService.register(this.state.data);
+      const response = await userService.register(this.state.data);
+      authService.loginWithJwt(response.headers["x-auth-token"]);
+      window.location = "/";
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
         const errors = { ...this.state.errors };

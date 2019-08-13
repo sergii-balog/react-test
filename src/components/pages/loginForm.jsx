@@ -9,7 +9,6 @@ class LoginForm extends FormBase {
     data: { username: "", password: "" },
     errors: {}
   };
-
   schema = {
     username: Joi.string()
       .required()
@@ -20,8 +19,17 @@ class LoginForm extends FormBase {
   };
 
   doSubmit = async () => {
-    const { username, password } = this.state.data;
-    const result = await authService.login(username, password);
+    try {
+      const { username, password } = this.state.data;
+      await authService.login(username, password);
+      window.location = "/";
+    } catch (ex) {
+      if (ex.response && ex.response.status === 400) {
+        const errors = { ...this.state.errors };
+        errors.username = ex.response.data;
+        this.setState({ errors });
+      }
+    }
   };
 
   render() {

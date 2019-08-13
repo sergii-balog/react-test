@@ -9,5 +9,5 @@ export async function register(user) {
     password: user.password,
     name: user.name
   });
-  return result.data;
+  return result;
 }

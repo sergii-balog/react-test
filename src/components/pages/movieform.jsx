@@ -65,9 +65,16 @@ class MovieForm extends FormBase {
   };
 
   doSubmit = async () => {
-    // call the server
-    await saveMovie(this.state.data);
-    this.props.history.push("/movies");
+    try {
+      await saveMovie(this.state.data);
+      this.props.history.push("/movies");
+    } catch (ex) {
+      if (ex.response && ex.response.status === 400) {
+        const errors = { ...this.state.errors };
+        errors.title = ex.response.data;
+        this.setState({ errors });
+      }
+    }
   };
   handleCancel = e => {
     e.preventDefault();

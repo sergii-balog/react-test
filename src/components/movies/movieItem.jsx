@@ -11,7 +11,7 @@ class MovieItem extends Component {
         </td>
         <td>{movie.genre.name}</td>
         <td>{movie.numberInStock}</td>
-        <td>{movie.dailyRentalRate}</td>
+        <td>{movie.dailyRentalRent}</td>
         <td className="text-center">
           <Like
             id={movie._id}
