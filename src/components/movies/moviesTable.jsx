@@ -48,6 +48,7 @@ class MoviesTable extends Component {
                 movie={movie}
                 onDelete={onDelete}
                 onLikeClicked={onLikeClicked}
+                user={this.props.user}
               />
             ))}
           </tbody>

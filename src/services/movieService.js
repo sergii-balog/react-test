@@ -28,7 +28,12 @@ export async function saveMovie(movie) {
   return result.data;
 }
 
-export async function deleteMovie(id) {
-  const result = await http.delete(movieUrl(id));
+export async function deleteMovie(movie) {
+  const body = { ...movie };
+  body.genreId = movie.genre._id;
+  delete body.genre;
+  delete body._id;
+  delete body.__v;
+  const result = await http.delete(movieUrl(movie._id), { data: body });
   return result.data;
 }

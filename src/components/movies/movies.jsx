@@ -30,20 +30,22 @@ class Movies extends Component {
   }
   handleDelete = async movieId => {
     const { movies: originalMovies } = this.state;
-    if (
-      window.confirm(
-        "Are you sure you want to delete '" +
-          originalMovies.filter(x => x._id === movieId)[0].title +
-          "'?"
-      )
-    ) {
+    const title = originalMovies.filter(x => x._id === movieId)[0].title;
+    if (window.confirm("Are you sure you want to delete '" + title + "'?")) {
       const movies = originalMovies.filter(x => x._id !== movieId);
       this.setState({ movies });
       try {
-        await deleteMovie(movieId);
+        await deleteMovie(originalMovies.filter(x => x._id === movieId)[0]);
+        toast.success(`'${title}' movie deleted successfully.`);
       } catch (ex) {
         if (ex.response && ex.response.status === 404) {
           toast.error("This movie has already been deleted");
+        }
+        if (ex.response && ex.response.status === 400) {
+          toast.error("Bad request : " + ex.response.data);
+        }
+        if (ex.response && ex.response.status === 403) {
+          toast.error("Forbidden : " + ex.response.data);
         }
         this.setState({ movies: originalMovies });
       }
@@ -108,6 +110,7 @@ class Movies extends Component {
               -1
           );
     const sorted = _.orderBy(filteredMovies, [sortBy.column], [sortBy.type]);
+    const { user } = this.props;
     return (
       <main role="main" className="container p-2">
         <div className="row">
@@ -119,9 +122,11 @@ class Movies extends Component {
             />
           </div>
           <div className="col">
-            <Link to="/movies/new" className="btn btn-primary btn-sm my-2">
-              Add movie
-            </Link>
+            {user && (
+              <Link to="/movies/new" className="btn btn-primary btn-sm my-2">
+                Add movie
+              </Link>
+            )}
             <MovieHeader
               numberOfItems={filteredMovies.length}
               numberOfLiked={
@@ -137,6 +142,7 @@ class Movies extends Component {
               onLikeClicked={this.handleLikedClicked}
               onSort={this.handleSort}
               sortBy={sortBy}
+              user={this.props.user}
             />
             <Paging
               totalItems={filteredMovies.length}

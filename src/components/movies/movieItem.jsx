@@ -7,7 +7,11 @@ class MovieItem extends Component {
     return (
       <tr>
         <td>
-          <Link to={`/movies/${movie._id}`}>{movie.title}</Link>
+          {this.props.user ? (
+            <Link to={`/movies/${movie._id}`}>{movie.title}</Link>
+          ) : (
+            <span>{movie.title}</span>
+          )}
         </td>
         <td>{movie.genre.name}</td>
         <td>{movie.numberInStock}</td>
@@ -20,12 +24,14 @@ class MovieItem extends Component {
           />
         </td>
         <td className="text-center">
-          <button
-            onClick={() => onDelete(movie._id)}
-            className="btn btn-sm btn-danger m-2"
-          >
-            <i className="fa fa-trash" />
-          </button>
+          {this.props.user && this.props.user.isAdmin && (
+            <button
+              onClick={() => onDelete(movie._id)}
+              className="btn btn-sm btn-danger m-2"
+            >
+              <i className="fa fa-trash" />
+            </button>
+          )}
         </td>
       </tr>
     );
