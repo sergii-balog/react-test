@@ -22,10 +22,13 @@ class App extends Component {
   handleSelectFlag = countryCode => {
     const lang = countryCode === "US" ? "en" : "ua";
     i18n.changeLanguage(lang);
+    localStorage.setItem("lang", lang);
     this.setState({ lang });
   };
   componentDidMount() {
     const user = authService.getCurrentUser();
+    const lang = localStorage.getItem("lang");
+    if (lang) i18n.changeLanguage(lang);
     this.setState({ user });
   }
   render() {
