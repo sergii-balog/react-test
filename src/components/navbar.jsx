@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { NavLink, Link } from "react-router-dom";
+import LanguageSelector from "./common/langSelector";
+import i18n from "../i18n";
 
 class NavBar extends Component {
   render() {
@@ -23,24 +25,24 @@ class NavBar extends Component {
         <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div className="navbar-nav">
             <NavLink className="nav-item nav-link" to="/movies">
-              Movies
+              {i18n.t("Movies")}
             </NavLink>
             <NavLink className="nav-item nav-link" to="/customers">
-              Customers
+              {i18n.t("Customers")}
             </NavLink>
             <NavLink className="nav-item nav-link" to="/rentals">
-              Rentals
+              {i18n.t("Rentals")}
             </NavLink>
             <NavLink className="nav-item nav-link" to="/cart">
-              Cart
+              {i18n.t("Cart")}
             </NavLink>
             {!user && (
               <React.Fragment>
                 <NavLink className="nav-item nav-link" to="/login">
-                  Login
+                  {i18n.t("Login")}
                 </NavLink>
                 <NavLink className="nav-item nav-link" to="/register">
-                  Register
+                  {i18n.t("Register")}
                 </NavLink>
               </React.Fragment>
             )}
@@ -50,12 +52,13 @@ class NavBar extends Component {
                   {user.name}
                 </NavLink>
                 <NavLink className="nav-item nav-link" to="/logout">
-                  Logout
+                  {i18n.t("Logout")}
                 </NavLink>
               </React.Fragment>
             )}
           </div>
         </div>
+        <LanguageSelector onSelectFlag={this.props.onSelectFlag} />
       </nav>
     );
   }
