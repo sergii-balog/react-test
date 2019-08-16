@@ -9,7 +9,7 @@ class NavBar extends Component {
     return (
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
         <Link className="navbar-brand" to="/">
-          Movie Shop
+          {i18n.t("AppName")}
         </Link>
         <button
           className="navbar-toggler"

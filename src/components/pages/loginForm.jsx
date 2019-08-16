@@ -4,6 +4,7 @@ import { Redirect } from "react-router-dom";
 import FormBase from "../common/form";
 import FormTitle from "../common/formTitle";
 import * as authService from "../../services/authService";
+import i18n from "../../i18n";
 
 class LoginForm extends FormBase {
   state = {
@@ -42,18 +43,18 @@ class LoginForm extends FormBase {
         <form onSubmit={this.handleSubmit}>
           {this.renderInput(
             "username",
-            "User name",
-            "User name",
-            "We'll never share your email with anyone else"
+            i18n.t("User name"),
+            i18n.t("User name"),
+            i18n.t("UserName hint")
           )}
           {this.renderInput(
             "password",
-            "Password",
-            "Type password",
+            i18n.t("Password"),
+            i18n.t("Type password"),
             "",
             "password"
           )}
-          {this.renderButton("Login")}
+          {this.renderButton(i18n.t("Login"))}
         </form>
       </div>
     );

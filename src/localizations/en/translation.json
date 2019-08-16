@@ -6,5 +6,10 @@
   "Login": "Login",
   "Register": "Register",
   "Logout": "Logout",
-  "Welcome message": "Welcome to our movies shop. Hope you have good time and enjoy it :)"
+  "Welcome message": "Welcome to our movies shop. Hope you have good time and enjoy it :)",
+  "AppName": "Movie Shop",
+  "User name": "User name",
+  "UserName hint": "We'll never share your email with anyone else",
+  "Password": "Password",
+  "Type password": "Type password"
 }

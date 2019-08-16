@@ -43,7 +43,7 @@ class RegistrationForm extends FormBase {
   render() {
     return (
       <div className="container">
-        <FormTitle title="Registration" />
+        <FormTitle title="Register" />
         <form onSubmit={this.handleSubmit}>
           {this.renderInput(
             "username",

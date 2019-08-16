@@ -4,7 +4,7 @@ import "react-flags-select/css/react-flags-select.css";
 
 class LanguageSelector extends Component {
   getDefaultCountry() {
-    const lang = localStorage.getItem("lang");
+    const lang = localStorage.getItem("i18nextLng");
     if (lang && lang === "ua") return "UA";
     return "US";
   }
